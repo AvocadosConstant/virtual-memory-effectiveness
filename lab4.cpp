@@ -34,10 +34,19 @@ int main(int argc, char* argv[]){
     int addressSize = atoi(argv[2]);
     int repeatPercent = atoi(argv[3]);
 
+    /* open file in write mode */
+    std::ofstream outputFile;
+    outputFile.open("outputFile.txt");
+
     //printf("%d processes\n%d address size\n%d%% repetition\n", numProcs, addressSize, repeatPercent);
     
     //  Printing all START lines
-    for(int i = 0; i < numProcs; i++) printf("START\t%d\t%d\n", i, addressSize);
+    for(int i = 0; i < numProcs; i++)
+	{
+	    outputFile << "START\t" << i << "\t" << addressSize << std::endl;
+	}
+
+//	 printf("START\t%d\t%d\n", i, addressSize);
 
     std::vector<std::vector<int>> repetitionMatrix(numProcs);
 
@@ -56,11 +65,16 @@ int main(int argc, char* argv[]){
             pageNum = repetitionMatrix[curProc][std::rand() % repetitionMatrix[curProc].size()];
             repeatCount++;
         }
-        printf("REFERENCE\t%d\t%d\n", curProc, pageNum); 
+	outputFile << "REFERENCE\t" << curProc << "\t" << pageNum << std::endl;
+  //      printf("REFERENCE\t%d\t%d\n", curProc, pageNum); 
     }
 
     //  Printing all START lines
-    for(int i = 0; i < numProcs; i++) printf("TERMINATE\t%d\n", i);
+    for(int i = 0; i < numProcs; i++) 
+	{
+		outputFile << "TERMINATE\t" << i << std::endl;
+	}
+	//printf("TERMINATE\t%d\n", i);
 
 
     //printMatrix(repetitionMatrix);
