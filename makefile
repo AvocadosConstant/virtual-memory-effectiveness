@@ -9,6 +9,6 @@ lab5.o:	lab5.cpp
 	g++ -std=c++11 -g -c lab5.cpp
 
 clean:
-	rm -f *.o lab4 lab5
+	rm -f *.o *~ *.swp lab4 lab5
 
 again:	clean all
