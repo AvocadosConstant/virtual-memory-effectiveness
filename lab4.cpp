@@ -41,8 +41,7 @@ int main(int argc, char* argv[]){
     //printf("%d processes\n%d address size\n%d%% repetition\n", numProcs, addressSize, repeatPercent);
     
     //  Printing all START lines
-    for(int i = 0; i < numProcs; i++)
-	{
+    for(int i = 0; i < numProcs; i++) {
 	    outputFile << "START\t" << i << "\t" << addressSize << std::endl;
 	}
 
@@ -70,8 +69,7 @@ int main(int argc, char* argv[]){
     }
 
     //  Printing all START lines
-    for(int i = 0; i < numProcs; i++) 
-	{
+    for(int i = 0; i < numProcs; i++) {
 		outputFile << "TERMINATE\t" << i << std::endl;
 	}
 	//printf("TERMINATE\t%d\n", i);
