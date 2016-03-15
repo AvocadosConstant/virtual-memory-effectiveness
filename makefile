@@ -8,6 +8,12 @@ lab4.o:	lab4.cpp
 lab5.o:	lab5.cpp
 	g++ -std=c++11 -g -c lab5.cpp
 
+lab4: lab4.o
+	g++ -std=c++11 -g -c lab4.o -o lab4
+
+lab5: lab5.o
+	g++ -std=c++11 -g -c lab5.o -o lab5
+
 clean:
 	rm -f *.o *~ *.swp lab4 lab5
 

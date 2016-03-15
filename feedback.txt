@@ -1,0 +1,22 @@
+Feedback from class on lab question sheets:
+
+-capture locality of reference
+-how can you specify things from the users?
+	-like how will you characterize the locality of reference from a program?
+-turn high level ideas into page reference streams that have meaning when you execute page replacement algorithms on them
+-how are you going to use your program?
+-you might provide more flexibility than you actually use in your study
+
+
+balance flexibility and scope ***
+
+*chapter 22 of the book will help
+
+-just try enough different things to get meaningful results
+
+hardly anyone seemed to address this in the answers...
+
+how do you express locality?
+
+"we can get % locality, num processes etc from user via command line args" but how exactly is that used/done?
+
