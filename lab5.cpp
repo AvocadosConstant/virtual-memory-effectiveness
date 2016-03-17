@@ -4,9 +4,11 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <ctime>
+#include <sys/time.h>
 #include <unordered_map>
 #include "PageTable.h"
+
+struct timeval start, end;
 
 std::vector<std::string> split(std::string line){
   std::vector<std::string> ret_vec;
@@ -24,37 +26,41 @@ std::vector<std::string> split(std::string line){
   return ret_vec;
 }
 
-PageTable* start(int pid, int address_space_size){
-  //std::cout << pid << std::endl;
-  //std::cout << address_space_size << std::endl;
-  return new PageTable(address_space_size);
+void startProcess(std::vector<PageTable*>& page_tables, int pid, int address_space_size){
+  page_tables.push_back(new PageTable(pid, address_space_size));
 }
 
 void reference(int pid, int vpn){
 
 }
 
-void terminate(int pid){
-
+void terminateProcess(std::vector<PageTable*>& page_tables, int pid){
+  for(int i = 0; i < page_tables.size(); ++i){
+    if(page_tables[i]->getPid() == pid){
+      delete page_tables[i];
+      page_tables.erase(page_tables.begin() + i);
+    }
+  }
 }
 
 int main() {
-  clock_t begin = clock(); // need to use gettimeofday
+  gettimeofday(&start, NULL);
+
   std::ifstream file ("input.txt");
   std::string line;
   std::vector< std::string > lines;
   std::vector<PageTable*> page_tables;
+  std::unordered_map<int, double> tlb, page;
 
   while (getline(file, line)){
     switch(line[0]){
-      case 'S': page_tables.push_back(start(std::stoi(split(line)[1]), std::stoi(split(line)[2]))); break;
+      case 'S': startProcess(page_tables, std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
       case 'R': reference(std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
-      case 'T': terminate(std::stoi(split(line)[1])); break;
+      case 'T': terminateProcess(page_tables, std::stoi(split(line)[1])); break;
     }
   }
 
-  std::unordered_map<int, double> tlb, page;
-
+  //these are some functions that can be used in the reference section
   tlb.insert(std::make_pair<int,double>(17822,6.0)); // move insertion
   tlb.insert(std::make_pair<int,double>(17823,6.0));
 
@@ -67,13 +73,12 @@ int main() {
   if(got == tlb.end()){
     std::cout << "not found";
   }else{
-    std::cout << got->first << " is " << got->second;
+    std::cout << got->first << " is " << got->second << std::endl;
   }
+  //end here
 
-  std::cout << std::endl;
-
-  clock_t end = clock();
-  std::cout << double (end - begin) / CLOCKS_PER_SEC << std::endl;
+  gettimeofday(&end, NULL);
+  std::cout << "Elapsed Time: " << ((end.tv_sec  - start.tv_sec) * 1000 + ((end.tv_usec - start.tv_usec)/1000.0) + 0.5) << "ms" << std::endl;
 
   file.close();
   return 0;

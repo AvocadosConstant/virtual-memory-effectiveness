@@ -4,12 +4,14 @@
 
 class PageTable{
   private:
+    int pid;
     int size;
     int* table;
 
   public:
-    PageTable(int size);
+    PageTable(int pid, int size);
     ~PageTable();
 
     int lookup(int reference);
+    int getPid();
 };

@@ -1,17 +1,22 @@
 #include "PageTable.h"
 
-PageTable::PageTable(int size){
+PageTable::PageTable(int pid, int size){
+  this->pid = pid;
   this->size = size;
   this->table = new int[size];
 }
 
-PageTable::lookup(int reference){
+int PageTable::lookup(int reference){
   for(int i = 0; i < this->size; ++i){
     if(this->table[i] == reference){
       return 1;
     }
   }
   return 0;
+}
+
+int PageTable::getPid(){
+  return this->pid;
 }
 
 PageTable::~PageTable(){
