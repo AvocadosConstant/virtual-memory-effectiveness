@@ -6,7 +6,7 @@
 #include <vector>
 #include <ctime>
 #include <unordered_map>
-#include <string>
+#include "PageTable.h"
 
 std::vector<std::string> split(std::string line){
   std::vector<std::string> ret_vec;
@@ -24,9 +24,10 @@ std::vector<std::string> split(std::string line){
   return ret_vec;
 }
 
-void start(int pid, int address_space_size){
-  std::cout << pid << std::endl;
-  std::cout << address_space_size << std::endl;
+PageTable* start(int pid, int address_space_size){
+  //std::cout << pid << std::endl;
+  //std::cout << address_space_size << std::endl;
+  return new PageTable(address_space_size);
 }
 
 void reference(int pid, int vpn){
@@ -38,14 +39,15 @@ void terminate(int pid){
 }
 
 int main() {
-  clock_t begin = clock();
+  clock_t begin = clock(); // need to use gettimeofday
   std::ifstream file ("input.txt");
   std::string line;
   std::vector< std::string > lines;
+  std::vector<PageTable*> page_tables;
 
   while (getline(file, line)){
     switch(line[0]){
-      case 'S': start(std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
+      case 'S': page_tables.push_back(start(std::stoi(split(line)[1]), std::stoi(split(line)[2]))); break;
       case 'R': reference(std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
       case 'T': terminate(std::stoi(split(line)[1])); break;
     }
@@ -53,14 +55,15 @@ int main() {
 
   std::unordered_map<int, double> tlb, page;
 
-  tlb.insert (std::make_pair<int,double>(17822,6.0)); // move insertion
-  tlb.insert (std::make_pair<int,double>(17823,6.0));
+  tlb.insert(std::make_pair<int,double>(17822,6.0)); // move insertion
+  tlb.insert(std::make_pair<int,double>(17823,6.0));
 
   std::cout << "tlb contains:" << std::endl;
   for (auto& x: tlb)
     std::cout << x.first << ": " << x.second << std::endl;
 
   std::unordered_map<int,double>::const_iterator got = tlb.find(17822);
+
   if(got == tlb.end()){
     std::cout << "not found";
   }else{
