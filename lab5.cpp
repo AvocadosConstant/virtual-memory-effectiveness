@@ -26,37 +26,41 @@ std::vector<std::string> split(std::string line){
   return ret_vec;
 }
 
-int getPageFaults(std::vector<PageTalbe*> &page_tables){
+int getPageFaults(std::vector<PageTable*> &page_tables){
   int pageFaults = 0;
   for (int i = 0; i < page_tables.size(); ++i)
   {
-    pageFaults += page_tables[i].getPageFaultNum();
+    pageFaults += page_tables[i]->getPageFaultNum();
   }
 
   return pageFaults;
 }
 
 void pageTableSearch(std::vector<PageTable*> &page_tables, int pid, int vpn){
-
+  //search page table
   int ref;
   for (int i = 0; i < page_tables.size(); ++i)
   {
     if(page_tables[i]->getPid() == pid){
-      if(page_tables[i]->lookup(vpn) == 1){
+      //if found break
+      if(page_tables[i]->lookup(vpn) == 1){ //probably just do a break and delete print statement
         std::cout << "page found in pagetable!" << std::endl;
       }
+      //if not found check for space
       else{
+        //if space add to page table
         if(page_tables[i]->isSpace() == 1){
           page_tables[i]->add(vpn);
         }
+        //if not, page fault
         else{
           page_tables[i]->addPageFault();
-          std::cout << "page fault!" << std::endl;
+          //std::cout << "page fault!" << std::endl;
         }
       }
     }
     else{
-      std::cout<< "process not found" << std::endl;
+      std::cout<< "process not found!" << std::endl;
       exit(1);
     }
   }
@@ -68,11 +72,19 @@ void startProcess(std::vector<PageTable*>& page_tables, int pid, int address_spa
 
 std::unordered_map<int, double> reference(std::vector<PageTable*> &page_tables, std::unordered_map<int, double> tlb, int pid, int vpn){
   
+  //check tlb size
+  if(tlb.size() >= 64){
+    //tlb is at capacity
+  }
+
+  //search tlb
   std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
 
   if(got == tlb.end()){
+    //if not found search page table
     pageTableSearch(page_tables, pid, vpn);
   }else{
+    //if found break (this else can be deleted probably)
     std::cout << "found in tlb" << std::endl;
   }
   return tlb;
@@ -110,11 +122,13 @@ int main() {
   tlb.insert(std::make_pair<int,double>(17822,6.0)); // move insertion
   tlb.insert(std::make_pair<int,double>(17823,6.0));
 
+  tlb.insert(std::make_pair<int, double>(pid, vpn));
+
   std::cout << "tlb contains:" << std::endl;
   for (auto& x: tlb)
     std::cout << x.first << ": " << x.second << std::endl;
 
-std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
+  std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
 
   if(got == tlb.end()){
     pageTableSearch(pid);
