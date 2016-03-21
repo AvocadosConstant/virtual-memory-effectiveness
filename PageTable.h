@@ -6,6 +6,7 @@ class PageTable{
   private:
     int pid;
     int size;
+    int pageFaultNum;
     int* table;
 
   public:
@@ -14,4 +15,8 @@ class PageTable{
 
     int lookup(int reference);
     int getPid();
+    int isSpace();
+    void add(int vpn);
+    void addPageFault();
+    int getPageFaultNum();
 };

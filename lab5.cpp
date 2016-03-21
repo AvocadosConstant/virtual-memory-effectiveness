@@ -26,12 +26,56 @@ std::vector<std::string> split(std::string line){
   return ret_vec;
 }
 
+int getPageFaults(std::vector<PageTalbe*> &page_tables){
+  int pageFaults = 0;
+  for (int i = 0; i < page_tables.size(); ++i)
+  {
+    pageFaults += page_tables[i].getPageFaultNum();
+  }
+
+  return pageFaults;
+}
+
+void pageTableSearch(std::vector<PageTable*> &page_tables, int pid, int vpn){
+
+  int ref;
+  for (int i = 0; i < page_tables.size(); ++i)
+  {
+    if(page_tables[i]->getPid() == pid){
+      if(page_tables[i]->lookup(vpn) == 1){
+        std::cout << "page found in pagetable!" << std::endl;
+      }
+      else{
+        if(page_tables[i]->isSpace() == 1){
+          page_tables[i]->add(vpn);
+        }
+        else{
+          page_tables[i]->addPageFault();
+          std::cout << "page fault!" << std::endl;
+        }
+      }
+    }
+    else{
+      std::cout<< "process not found" << std::endl;
+      exit(1);
+    }
+  }
+}
+
 void startProcess(std::vector<PageTable*>& page_tables, int pid, int address_space_size){
   page_tables.push_back(new PageTable(pid, address_space_size));
 }
 
-void reference(int pid, int vpn){
+std::unordered_map<int, double> reference(std::vector<PageTable*> &page_tables, std::unordered_map<int, double> tlb, int pid, int vpn){
+  
+  std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
 
+  if(got == tlb.end()){
+    pageTableSearch(page_tables, pid, vpn);
+  }else{
+    std::cout << "found in tlb" << std::endl;
+  }
+  return tlb;
 }
 
 void terminateProcess(std::vector<PageTable*>& page_tables, int pid){
@@ -55,12 +99,14 @@ int main() {
   while (getline(file, line)){
     switch(line[0]){
       case 'S': startProcess(page_tables, std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
-      case 'R': reference(std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
+      case 'R': tlb = reference(page_tables, tlb, std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
       case 'T': terminateProcess(page_tables, std::stoi(split(line)[1])); break;
     }
   }
 
-  //these are some functions that can be used in the reference section
+  int pageFaults = getPageFaults(page_tables);
+  std::cout << "Num page faults: " << pageFaults << std::endl;
+ /* //these are some functions that can be used in the reference section
   tlb.insert(std::make_pair<int,double>(17822,6.0)); // move insertion
   tlb.insert(std::make_pair<int,double>(17823,6.0));
 
@@ -68,13 +114,14 @@ int main() {
   for (auto& x: tlb)
     std::cout << x.first << ": " << x.second << std::endl;
 
-  std::unordered_map<int,double>::const_iterator got = tlb.find(17822);
+std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
 
   if(got == tlb.end()){
-    std::cout << "not found";
+    pageTableSearch(pid);
   }else{
     std::cout << got->first << " is " << got->second << std::endl;
-  }
+    return tlb;
+  */
   //end here
 
   gettimeofday(&end, NULL);
