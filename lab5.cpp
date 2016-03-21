@@ -68,7 +68,7 @@ std::unordered_map<int, int> reference(std::vector<PageTable*> &page_tables, std
 
   if(found == tlb.end()){ //if not found
     int index_in_table = pageTableSearch(page_tables, pid, vpn);
-    if(!full){
+    if(!full && index_in_table > -1){
       tlb.insert(std::make_pair(pid_process_mask, index_in_table));
     }
   }
