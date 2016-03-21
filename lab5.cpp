@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include "PageTable.h"
 
+int PAGE_FAULTS = 0;
 struct timeval start, end;
 
 std::vector<std::string> split(std::string line){
@@ -15,7 +16,7 @@ std::vector<std::string> split(std::string line){
   std::string current;
 
   for(char& c : line) {
-    if (c != ' ') current += c;
+    if (c != '\t') current += c;
     else {
       ret_vec.push_back(current);
       current = "";
@@ -26,78 +27,59 @@ std::vector<std::string> split(std::string line){
   return ret_vec;
 }
 
-int getPageFaults(std::vector<PageTable*> &page_tables){
-  int pageFaults = 0;
-  for (int i = 0; i < page_tables.size(); ++i)
-  {
-    pageFaults += page_tables[i]->getPageFaultNum();
-  }
-
-  return pageFaults;
-}
-
-void pageTableSearch(std::vector<PageTable*> &page_tables, int pid, int vpn){
+int pageTableSearch(std::vector<PageTable*> &page_tables, int pid, int vpn){
   //search page table
-  int ref;
   for (int i = 0; i < page_tables.size(); ++i)
   {
     if(page_tables[i]->getPid() == pid){
-      //if found break
-      if(page_tables[i]->lookup(vpn) == 1){ //probably just do a break and delete print statement
-        std::cout << "page found in pagetable!" << std::endl;
+      //if found, return
+      if(page_tables[i]->lookup(vpn) > -1){
+        return page_tables[i]->lookup(vpn);
       }
       //if not found check for space
       else{
+        page_tables[i]->addPageFault();
         //if space add to page table
-        if(page_tables[i]->isSpace() == 1){
-          page_tables[i]->add(vpn);
-        }
-        //if not, page fault
-        else{
-          page_tables[i]->addPageFault();
-          //std::cout << "page fault!" << std::endl;
+        if(page_tables[i]->isSpace()){
+          return page_tables[i]->add(vpn);
+        }else{ //if not, it's a bad page fault (not found and no room left in the table)
+          return -1;
         }
       }
     }
-    else{
-      std::cout<< "process not found!" << std::endl;
-      exit(1);
-    }
   }
+
+  std::cout<< "Error: Process not found. Exiting..." << std::endl;
+  exit(1);
+  return 1;
 }
 
 void startProcess(std::vector<PageTable*>& page_tables, int pid, int address_space_size){
   page_tables.push_back(new PageTable(pid, address_space_size));
 }
 
-std::unordered_map<double, double> reference(std::vector<PageTable*> &page_tables, std::unordered_map<double, double> tlb, int pid, int vpn){
-  int full = 0;
-
+std::unordered_map<int, int> reference(std::vector<PageTable*> &page_tables, std::unordered_map<int, int> tlb, int pid, int vpn){
   //check tlb size
-  if(tlb.size() >= 64){
-    full = 1;
-  }
+  int full = tlb.size() >= 64;
+  int pid_process_mask = pid*1e7 + vpn;
 
   //search tlb
-  std::unordered_map<double,double>::const_iterator got = tlb.find(pid);
+  std::unordered_map<int,int>::const_iterator found = tlb.find(pid_process_mask);
 
-  if(got == tlb.end()){
-    if(full == 0){
-        tlb.insert(std::make_pair<double, double>(pid, vpn));
+  if(found == tlb.end()){ //if not found
+    int index_in_table = pageTableSearch(page_tables, pid, vpn);
+    if(!full){
+      tlb.insert(std::make_pair(pid_process_mask, index_in_table));
     }
-    else{ //if not found (and full?) search page table
-          pageTableSearch(page_tables, pid, vpn);
-    }
-  }else{
-    //if found break (this else can be deleted probably)
-    std::cout << "found in tlb" << std::endl;
   }
+
   return tlb;
 }
 
 void terminateProcess(std::vector<PageTable*>& page_tables, int pid){
   for(int i = 0; i < page_tables.size(); ++i){
     if(page_tables[i]->getPid() == pid){
+      PAGE_FAULTS += page_tables[i]->getPageFaultNum();
       delete page_tables[i];
       page_tables.erase(page_tables.begin() + i);
     }
@@ -107,11 +89,11 @@ void terminateProcess(std::vector<PageTable*>& page_tables, int pid){
 int main() {
   gettimeofday(&start, NULL);
 
-  std::ifstream file ("input.txt");
+  std::ifstream file ("outputFile.txt");
   std::string line;
   std::vector< std::string > lines;
   std::vector<PageTable*> page_tables;
-  std::unordered_map<double, double> tlb, page;
+  std::unordered_map<int, int> tlb;
 
   while (getline(file, line)){
     switch(line[0]){
@@ -121,27 +103,7 @@ int main() {
     }
   }
 
-  int pageFaults = getPageFaults(page_tables);
-  std::cout << "Num page faults: " << pageFaults << std::endl;
- /* //these are some functions that can be used in the reference section
-  tlb.insert(std::make_pair<int,double>(17822,6.0)); // move insertion
-  tlb.insert(std::make_pair<int,double>(17823,6.0));
-
-  tlb.insert(std::make_pair<int, double>(pid, vpn));
-
-  std::cout << "tlb contains:" << std::endl;
-  for (auto& x: tlb)
-    std::cout << x.first << ": " << x.second << std::endl;
-
-  std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
-
-  if(got == tlb.end()){
-    pageTableSearch(pid);
-  }else{
-    std::cout << got->first << " is " << got->second << std::endl;
-    return tlb;
-  */
-  //end here
+  std::cout << "Num Page Faults: " << PAGE_FAULTS << std::endl;
 
   gettimeofday(&end, NULL);
   std::cout << "Elapsed Time: " << ((end.tv_sec  - start.tv_sec) * 1000 + ((end.tv_usec - start.tv_usec)/1000.0) + 0.5) << "ms" << std::endl;

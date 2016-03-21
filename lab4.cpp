@@ -39,7 +39,7 @@ int main(int argc, char* argv[]){
     outputFile.open("outputFile.txt");
 
     //printf("%d processes\n%d address size\n%d%% repetition\n", numProcs, addressSize, repeatPercent);
-    
+
     //  Printing all START lines
     for(int i = 0; i < numProcs; i++) {
 	    outputFile << "START\t" << i << "\t" << addressSize << std::endl;
@@ -52,9 +52,9 @@ int main(int argc, char* argv[]){
     int repeatCount = 0;
     for(int i = 0; i < numProcs * addressSize; i++) {
         int curProc = std::rand() % numProcs;
-        int pageNum = std::rand() % addressSize; 
+        int pageNum = std::rand() % addressSize;
         //printf("i = %d\tcurProc = %d\tpageNum = %d\n", i, curProc, pageNum);
-        
+
         //  if vec is empty OR if random percent isn't within specified percent
         if(repetitionMatrix[curProc].size() == 0 || std::rand() % 100 >= repeatPercent ) {
             addUnique(repetitionMatrix[curProc], pageNum);
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]){
             repeatCount++;
         }
 	outputFile << "REFERENCE\t" << curProc << "\t" << pageNum << std::endl;
-  //      printf("REFERENCE\t%d\t%d\n", curProc, pageNum); 
+  //      printf("REFERENCE\t%d\t%d\n", curProc, pageNum);
     }
 
     //  Printing all START lines

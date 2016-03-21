@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 class PageTable{
   private:
     int pid;
@@ -16,7 +15,7 @@ class PageTable{
     int lookup(int reference);
     int getPid();
     int isSpace();
-    void add(int vpn);
+    int add(int vpn);
     void addPageFault();
     int getPageFaultNum();
 };

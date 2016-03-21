@@ -15,10 +15,10 @@ PageTable::PageTable(int pid, int size){
 int PageTable::lookup(int reference){
   for(int i = 0; i < this->size; ++i){
     if(this->table[i] == reference){
-      return 1;
+      return i;
     }
   }
-  return 0;
+  return -1;
 }
 
 int PageTable::getPid(){
@@ -35,14 +35,15 @@ int PageTable::isSpace(){
   return 0; //no space
 }
 
-void PageTable::add(int vpn){
+int PageTable::add(int vpn){
   for (int i = 0; i < this->size; ++i)
   {
     if(this->table[i] == 0){
       this->table[i] = vpn;
-      return;
+      return i;
     }
   }
+  return -1;
 }
 
 void PageTable::addPageFault(){
@@ -51,8 +52,9 @@ void PageTable::addPageFault(){
 }
 
 int PageTable::getPageFaultNum(){
-  return pageFaultNum;
+  return this->pageFaultNum;
 }
+
 PageTable::~PageTable(){
   delete[] this->table;
 }
