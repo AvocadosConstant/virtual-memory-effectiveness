@@ -33,6 +33,7 @@ int main(int argc, char* argv[]){
     int numProcs = atoi(argv[1]);
     int addressSize = atoi(argv[2]);
     int repeatPercent = atoi(argv[3]);
+    int tableSize = atoi(argv[4]);
 
     /* open file in write mode */
     std::ofstream outputFile;
@@ -42,7 +43,7 @@ int main(int argc, char* argv[]){
 
     //  Printing all START lines
     for(int i = 0; i < numProcs; i++) {
-	    outputFile << "START\t" << i << "\t" << addressSize << std::endl;
+	    outputFile << "START\t" << i << "\t" << addressSize << "\t" << tableSize << std::endl;
 	}
 
 //	 printf("START\t%d\t%d\n", i, addressSize);
