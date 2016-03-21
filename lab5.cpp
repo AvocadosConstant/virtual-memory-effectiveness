@@ -70,19 +70,24 @@ void startProcess(std::vector<PageTable*>& page_tables, int pid, int address_spa
   page_tables.push_back(new PageTable(pid, address_space_size));
 }
 
-std::unordered_map<int, double> reference(std::vector<PageTable*> &page_tables, std::unordered_map<int, double> tlb, int pid, int vpn){
-  
+std::unordered_map<double, double> reference(std::vector<PageTable*> &page_tables, std::unordered_map<double, double> tlb, int pid, int vpn){
+  int full = 0;
+
   //check tlb size
   if(tlb.size() >= 64){
-    //tlb is at capacity
+    full = 1;
   }
 
   //search tlb
-  std::unordered_map<int,double>::const_iterator got = tlb.find(pid);
+  std::unordered_map<double,double>::const_iterator got = tlb.find(pid);
 
   if(got == tlb.end()){
-    //if not found search page table
-    pageTableSearch(page_tables, pid, vpn);
+    if(full == 0){
+        tlb.insert(std::make_pair<double, double>(pid, vpn));
+    }
+    else{ //if not found (and full?) search page table
+          pageTableSearch(page_tables, pid, vpn);
+    }
   }else{
     //if found break (this else can be deleted probably)
     std::cout << "found in tlb" << std::endl;
@@ -106,7 +111,7 @@ int main() {
   std::string line;
   std::vector< std::string > lines;
   std::vector<PageTable*> page_tables;
-  std::unordered_map<int, double> tlb, page;
+  std::unordered_map<double, double> tlb, page;
 
   while (getline(file, line)){
     switch(line[0]){
