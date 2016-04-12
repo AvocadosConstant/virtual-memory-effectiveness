@@ -10,10 +10,10 @@ How to run lab 4:
 2. ./lab4 <num-processes> <address-space-size> <page-table-size> <percentage-repetition>
 Note: all paramaters are required, none are optional
 
-Num processes: number of processes 
+Num processes: number of processes
 Address space size: size of address space of process
 Page table size: size of page table for process
-Percentage repetition: percentage of repeated references
+Percentage repetition: percentage of repeated references (to manage locality)
 
 3. press enter
 
