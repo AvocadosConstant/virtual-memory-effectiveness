@@ -31,27 +31,27 @@ int main(int argc, char* argv[]){
         return 0;
     }
     int numProcs = atoi(argv[1]);
-    int addressSize = atoi(argv[2]);
-    int tableSize = atoi(argv[3]);
+    int tableSize = atoi(argv[2]);
+    int addressSize = atoi(argv[3]);
     int repeatPercent = atoi(argv[4]);
 
     /* open file in write mode */
     std::ofstream outputFile;
     outputFile.open("outputFile.txt");
 
-    //printf("%d processes\n%d address size\n%d%% repetition\n", numProcs, addressSize, repeatPercent);
+    //printf("%d processes\n%d address size\n%d%% repetition\n", numProcs, tableSize, repeatPercent);
 
     //  Printing all START lines
     for(int i = 0; i < numProcs; i++) {
-	    outputFile << "START\t" << i << "\t" << tableSize << std::endl;
+	    outputFile << "START\t" << i << "\t" << addressSize << std::endl;
 	  }
 
     std::vector<std::vector<int>> repetitionMatrix(numProcs);
 
     int repeatCount = 0;
-    for(int i = 0; i < numProcs * addressSize; i++) {
+    for(int i = 0; i < numProcs * tableSize; i++) {
         int curProc = std::rand() % numProcs;
-        int pageNum = std::rand() % addressSize;
+        int pageNum = std::rand() % tableSize;
         //printf("i = %d\tcurProc = %d\tpageNum = %d\n", i, curProc, pageNum);
 
         //  if vec is empty OR if random percent isn't within specified percent
@@ -75,5 +75,5 @@ int main(int argc, char* argv[]){
 
 
     //printMatrix(repetitionMatrix);
-    //printf("\tRepeated %d times out of %d. That's %f%%! Specified percentage is %d%%.\n\n", repeatCount, numProcs*addressSize, 1.0 * repeatCount/(numProcs*addressSize), repeatPercent);
+    //printf("\tRepeated %d times out of %d. That's %f%%! Specified percentage is %d%%.\n\n", repeatCount, numProcs*tableSize, 1.0 * repeatCount/(numProcs*tableSize), repeatPercent);
 }
