@@ -7,12 +7,12 @@ Charlie DiGiovanna
 
 How to run lab 4:
 1. make
-2. ./lab4 <num-processes> <min-address-space-size> <max-address-space-size> <page-table-size> -<repetition-flag> <repetition-specification>
+2. ./lab4 <num-processes> <min-page-table-size> <max-page-table-size> <address-space-size> -<repetition-flag> <repetition-specification>
 
 Num processes: number of processes.
-Minimum address space size: minimum size of address space a process can be given.
-Maximum address space size: maximum size of address space a process can be given.
-Page table size: size of page table for process.
+Minimum page table size: minimum size of page table a process can be given.
+Maximum page table size: maximum size of page table a process can be given.
+Address space size: size of the address space for a process.
 Repetition flag: either -p or -r to specify the proceeding paramater will represent number of phases, or repetition percentage, respectively.
 Number of phases: Number of phases the process will go through where the repetition percentage toggles between 10% or 90% (always starts at 10%).
 Repetition percentage: percentage of repeated references (to manage locality).
