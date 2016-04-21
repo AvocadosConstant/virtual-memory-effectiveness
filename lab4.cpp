@@ -34,6 +34,7 @@ int main(int argc, char* argv[]){
     int minAddressSize = atoi(argv[2]);
     int maxAddressSize = atoi(argv[3]);
     int tableSize = atoi(argv[4]);
+    std::srand(std::time(0));
 
     if (numProcs <= 0 || minAddressSize <= 0 || maxAddressSize <= 0 || tableSize <= 0) {
         std::perror("Unexpected parameter value. <num-processes>, <min-address-space-size>, <max-address-space-size>, and <page-table-size> must all be greater than 0.");
