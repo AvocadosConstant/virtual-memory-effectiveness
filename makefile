@@ -27,9 +27,10 @@ test:
 	for i in 0 10 20 30 40 50 60 70 80 90 99; do \
 		echo "-- Repetition at $$i% --\n" >> data.txt; \
 		echo "NO TLB:" >> data.txt; \
-		./lab4 $(p) $(m) $(M) $(a) -r 0 && ./lab5 >> data.txt; \
+		./lab4 $(p) $(m) $(M) $(a) -r 0; \
+		./lab5 >> data.txt; \
 		echo "\nW/ TLB:" >> data.txt; \
-		./lab4 $(p) $(m) $(M) $(a) -r 0 && ./lab5 -t >> data.txt; \
+		./lab5 -t >> data.txt; \
 		echo "" >> data.txt; \
 	done;
 
