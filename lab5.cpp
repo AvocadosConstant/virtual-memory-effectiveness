@@ -98,7 +98,7 @@ int main(int argc, char** argv) {
     }else{
       switch(line[0]){
         case 'S': startProcess(page_tables, std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
-        case 'R': page_faults += referenceTLB(page_tables, tlb, std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
+        case 'R': page_faults += referenceNoTLB(page_tables, tlb, std::stoi(split(line)[1]), std::stoi(split(line)[2])); break;
         case 'T': terminateProcess(page_tables, std::stoi(split(line)[1])); break;
       }
     }
