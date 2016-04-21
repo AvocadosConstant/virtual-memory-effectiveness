@@ -9,6 +9,7 @@ PageTable::PageTable(int pid, int size){
   for (int i = 0; i < size; ++i)
   {
     table[i] = 0;
+    fifo.push(i);
   }
 }
 
@@ -25,30 +26,14 @@ int PageTable::getPid(){
   return this->pid;
 }
 
-int PageTable::isSpace(){
-  for (int i = 0; i < this->size; ++i)
-  {
-    if(this->table[i] == 0){
-      return 1; //found a space
-    }
-  }
-  return 0; //no space
-}
-
-int PageTable::add(int vpn){
-  for (int i = 0; i < this->size; ++i)
-  {
-    if(this->table[i] == 0){
-      this->table[i] = vpn;
-      return i;
-    }
-  }
-  return -1;
-}
-
-void PageTable::addPageFault(){
+int PageTable::replace(int vpn){
   this->pageFaultNum++;
-  return;
+
+  int popped = this->fifo.front();
+  this->fifo.pop();
+  table[popped] = vpn;
+  this->fifo.push(popped);
+  return popped;
 }
 
 int PageTable::getPageFaultNum(){

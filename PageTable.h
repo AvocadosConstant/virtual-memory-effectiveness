@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <queue>
 
 class PageTable{
   private:
@@ -7,6 +8,7 @@ class PageTable{
     int size;
     int pageFaultNum;
     int* table;
+    std::queue<int> fifo;
 
   public:
     PageTable(int pid, int size);
@@ -14,8 +16,6 @@ class PageTable{
 
     int lookup(int reference);
     int getPid();
-    int isSpace();
-    int add(int vpn);
-    void addPageFault();
+    int replace(int vpn);
     int getPageFaultNum();
 };

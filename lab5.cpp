@@ -38,13 +38,7 @@ int pageTableSearch(std::vector<PageTable*> &page_tables, int pid, int vpn){
       }
       //if not found check for space
       else{
-        page_tables[i]->addPageFault();
-        //if space add to page table
-        if(page_tables[i]->isSpace()){
-          return page_tables[i]->add(vpn);
-        }else{ //if not, it's a bad page fault (not found and no room left in the table)
-          return -1;
-        }
+        return page_tables[i]->replace(vpn);
       }
     }
   }
