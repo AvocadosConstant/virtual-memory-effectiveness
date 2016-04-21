@@ -20,63 +20,18 @@ lab4: lab4.o
 lab5: lab5.o
 	g++ -std=c++11 -g -c lab5.o -o lab5
 
-test: #takes parameters: p=<num-processes> m=<min-address-space-size> M=<max-address-space-size> p=<page-table-size>
+# Params: p=<num-processes> m=<min-address-space-size> M=<max-address-space-size> p=<page-table-size>
+# Ex: make test p=5 m=1000 M=1000 a=10000
+test:
 	> data.txt
-	echo "-- Repetition at 0% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 0 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 0 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 10% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 10 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 10 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 20% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 20 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 20 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 30% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 30 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 30 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 40% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 40 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 40 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 50% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 50 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 50 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 60% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 60 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 60 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 70% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 70 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 70 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 80% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 80 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 80 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 90% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 90 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 90 && ./lab5 -t >> data.txt
-	echo "\n-- Repetition at 99% --\n" >> data.txt
-	echo "NO TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 99 && ./lab5 >> data.txt
-	echo "W/ TLB:" >> data.txt
-	./lab4 $(p) $(m) $(M) $(a) -r 99 && ./lab5 -t >> data.txt
+	for i in 0 10 20 30 40 50 60 70 80 90 99; do \
+		echo "-- Repetition at $$i% --\n" >> data.txt; \
+		echo "NO TLB:" >> data.txt; \
+		./lab4 $(p) $(m) $(M) $(a) -r 0 && ./lab5 >> data.txt; \
+		echo "\nW/ TLB:" >> data.txt; \
+		./lab4 $(p) $(m) $(M) $(a) -r 0 && ./lab5 -t >> data.txt; \
+		echo "" >> data.txt; \
+	done;
 
 clean:
 	rm -f *.o *~ *.swp lab4 lab5 outputFile.txt data.txt
