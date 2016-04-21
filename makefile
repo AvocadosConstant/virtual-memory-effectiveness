@@ -20,7 +20,7 @@ lab4: lab4.o
 lab5: lab5.o
 	g++ -std=c++11 -g -c lab5.o -o lab5
 
-# Params: p=<num-processes> m=<min-address-space-size> M=<max-address-space-size> p=<page-table-size>
+# Params: p=<num-processes> m=<min-address-space-size> M=<max-address-space-size> a=<page-table-size>
 # Ex: make test p=5 m=1000 M=1000 a=10000
 test:
 	> data.txt
