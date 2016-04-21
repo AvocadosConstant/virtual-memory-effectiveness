@@ -4,7 +4,6 @@ PageTable::PageTable(int pid, int size){
   this->pid = pid;
   this->size = size;
   this->table = new int[size];
-  this->pageFaultNum = 0;
 
   for (int i = 0; i < size; ++i)
   {
@@ -27,17 +26,11 @@ int PageTable::getPid(){
 }
 
 int PageTable::replace(int vpn){
-  this->pageFaultNum++;
-
   int popped = this->fifo.front();
   this->fifo.pop();
   table[popped] = vpn;
   this->fifo.push(popped);
   return popped;
-}
-
-int PageTable::getPageFaultNum(){
-  return this->pageFaultNum;
 }
 
 PageTable::~PageTable(){

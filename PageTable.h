@@ -6,7 +6,6 @@ class PageTable{
   private:
     int pid;
     int size;
-    int pageFaultNum;
     int* table;
     std::queue<int> fifo;
 
@@ -17,5 +16,4 @@ class PageTable{
     int lookup(int reference);
     int getPid();
     int replace(int vpn);
-    int getPageFaultNum();
 };
