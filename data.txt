@@ -1,0 +1,110 @@
+-- Repetition at 0% --
+
+NO TLB:
+Num Page Faults: 54148
+Elapsed Time: 1308.45ms
+
+W/ TLB:
+Num Page Faults: 27786
+Elapsed Time: 1320.89ms
+
+-- Repetition at 10% --
+
+NO TLB:
+Num Page Faults: 52389
+Elapsed Time: 1396.89ms
+
+W/ TLB:
+Num Page Faults: 29539
+Elapsed Time: 1384.9ms
+
+-- Repetition at 20% --
+
+NO TLB:
+Num Page Faults: 51298
+Elapsed Time: 1431ms
+
+W/ TLB:
+Num Page Faults: 30633
+Elapsed Time: 1509.29ms
+
+-- Repetition at 30% --
+
+NO TLB:
+Num Page Faults: 57593
+Elapsed Time: 1097.54ms
+
+W/ TLB:
+Num Page Faults: 24390
+Elapsed Time: 1175.35ms
+
+-- Repetition at 40% --
+
+NO TLB:
+Num Page Faults: 55745
+Elapsed Time: 1229.82ms
+
+W/ TLB:
+Num Page Faults: 26208
+Elapsed Time: 1256.97ms
+
+-- Repetition at 50% --
+
+NO TLB:
+Num Page Faults: 59171
+Elapsed Time: 1102.84ms
+
+W/ TLB:
+Num Page Faults: 22847
+Elapsed Time: 1013.82ms
+
+-- Repetition at 60% --
+
+NO TLB:
+Num Page Faults: 60669
+Elapsed Time: 1124.94ms
+
+W/ TLB:
+Num Page Faults: 21402
+Elapsed Time: 1076.88ms
+
+-- Repetition at 70% --
+
+NO TLB:
+Num Page Faults: 64135
+Elapsed Time: 972.305ms
+
+W/ TLB:
+Num Page Faults: 18088
+Elapsed Time: 1019.29ms
+
+-- Repetition at 80% --
+
+NO TLB:
+Num Page Faults: 68667
+Elapsed Time: 880.892ms
+
+W/ TLB:
+Num Page Faults: 13974
+Elapsed Time: 817.516ms
+
+-- Repetition at 90% --
+
+NO TLB:
+Num Page Faults: 74928
+Elapsed Time: 564.681ms
+
+W/ TLB:
+Num Page Faults: 9362
+Elapsed Time: 615.355ms
+
+-- Repetition at 99% --
+
+NO TLB:
+Num Page Faults: 81086
+Elapsed Time: 439.088ms
+
+W/ TLB:
+Num Page Faults: 23424
+Elapsed Time: 484.779ms
+
